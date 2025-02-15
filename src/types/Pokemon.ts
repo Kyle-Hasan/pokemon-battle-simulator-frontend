@@ -1,16 +1,17 @@
+import { Ability } from "./Ability";
+import { Move } from "./Move";
 import { PokemonSpecies } from "./PokemonSpecies";
 
 export interface Pokemon {
 
+  _id?: string;
 
-    
-     _id?: string;
+  nickname?: string;
 
+  pokemonSpecies?: PokemonSpecies
 
-    
-   nickname?: string;
+  moves: Move[] | string[]
 
-    
-    pokemonSpecies?:  PokemonSpecies
-  
+  ability:Ability | string
+
 }
