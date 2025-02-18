@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Move } from "../types/Move";
 import { Pokemon } from "../types/Pokemon";
 import { Input } from "./ui/input";
@@ -14,6 +14,7 @@ export default function MovesEditor() {
   const moves = usePokemonEditStoreInContext((state)=>state.moves)
 
   const initalizeTextValues = ()=>{
+   
       const textInputArr = []
       for(const move of moves) {
           textInputArr.push(move.name)
@@ -27,7 +28,7 @@ export default function MovesEditor() {
   
 
   
-  const [textInputValues,setTextInputValues] = useState(initalizeTextValues)
+  const [textInputValues,setTextInputValues] = useState<string[]>([])
   const  editMoveIndex = usePokemonEditStoreInContext((state)=>state.editMoveIndex)
   const setEditMoveIndex = usePokemonEditStoreInContext((state)=>state.setEditMoveIndex)
  
@@ -37,7 +38,7 @@ export default function MovesEditor() {
   
 
   const onInputChange = (input: string, index: number) => {
-    debugger
+   
     setEditMoveIndex(index)
     setSearchText(input)
     textInputValues[index] = input
@@ -46,6 +47,10 @@ export default function MovesEditor() {
     
 
   };
+
+  useEffect(()=> {
+    setTextInputValues(initalizeTextValues())
+  }, [moves])
 
   return (
     <div className="flex flex-col">

@@ -65,9 +65,12 @@ function RouteComponent() {
 
   return(
     <div>
+    <div className='flex justify-center mb-4 gap-4 p-4'>
+       <h1 className="font-bold text-center text-xl">Your Teams</h1>
     <Button onClick={goToTeambuilder}>
       New Team
     </Button>
+    </div>
     <ViewTeam></ViewTeam>
     </div>
   )

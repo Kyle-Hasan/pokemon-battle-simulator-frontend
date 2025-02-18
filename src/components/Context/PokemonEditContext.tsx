@@ -36,7 +36,9 @@ interface PokemonEditState {
   searchText:string,
   setSearchText:(text:string)=>void,
   editMoveIndex: number
-  setEditMoveIndex:(index:number)=>void
+  setEditMoveIndex:(index:number)=>void,
+  nickname:string,
+  setNickname:(nickname:string)=>void
 }
 
 
@@ -67,19 +69,49 @@ export const PokemonEditContextProvider = ({ children }: PokemonEditProviderProp
       _id
       nickname
       moves {
+        _id
         name
       }
       ability {
+       _id
         name
       }
       pokemonSpecies {
+       _id
         name
       }
     }
   }
 `;
 
-  const [editPokemon, { data, loading, error }] = useMutation<EditPokemon>(EDIT_POKEMON);
+const [editPokemon] = useMutation(EDIT_POKEMON, {
+  update(cache, { data }) {
+    const newPokemon = data?.editPokemon;
+    if (!newPokemon) return;
+
+  
+
+    const id = cache.identify(newPokemon);
+   
+    if (!id) {
+      console.error('Could not identify the Pokemon in the cache');
+      return;
+    }
+
+    cache.writeFragment({
+      id,
+      fragment: gql`
+        fragment Replacement on Pokemon {
+          _id
+          moves
+          ability
+          pokemonSpecies
+        }
+      `,
+      data: newPokemon,
+    });
+  },
+});
 
 
 
@@ -88,11 +120,12 @@ export const PokemonEditContextProvider = ({ children }: PokemonEditProviderProp
  
     propertiesChanged: string[]
   ) => {
-    debugger
+ 
     const store = storeRef.current?.getState()
     if(!store) {
       throw new Error("no store before api request")
     }
+
 
     const pokemonData = { ...pokemon, pokemonSpecies: store.pokemonSpecies?._id };
     const response = await editPokemon({
@@ -109,6 +142,7 @@ export const PokemonEditContextProvider = ({ children }: PokemonEditProviderProp
     }
   
     // Loop through each changed property and update the store accordingly
+ 
     propertiesChanged.forEach((prop) => {
      
       switch (prop) {
@@ -160,7 +194,9 @@ export const PokemonEditContextProvider = ({ children }: PokemonEditProviderProp
       searchText:"",
       setSearchText: (text:string)=> set({searchText:text}),
       editMoveIndex:-1,
-      setEditMoveIndex: (index:number)=> set({editMoveIndex:index})
+      setEditMoveIndex: (index:number)=> set({editMoveIndex:index}),
+      nickname:"",
+      setNickname: (nickname:string)=> set({nickname})
       
 
     }));

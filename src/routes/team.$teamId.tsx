@@ -13,9 +13,39 @@ const GET_TEAM = gql`
     pokemon {
       _id
       nickname
+      moves {
+      _id
+      name
+      }
+      ability {
+      _id
+      name
+      }
       pokemonSpecies {
+        _id
         name
         teamBuilderSprite
+        learnableMoves {
+          _id
+          name
+          description
+          basePower
+          accuracy
+          category
+        }
+        abilities {
+          _id
+          name
+          description
+        }
+          baseStats {
+        hp
+        attack
+        specialAttack
+        defense
+        specialDefense
+        speed
+        }
       }
     }
   }
@@ -38,10 +68,12 @@ function TeamComponent() {
     return <div>loading</div>
   }
 
+  console.log("data is", data)
+
   return (
     <>
     
-    {data && <ViewTeam team={data.getTeam}></ViewTeam>}
+    {data && <ViewTeam teamProp={data.getTeam}></ViewTeam>}
     </>
   )
 }

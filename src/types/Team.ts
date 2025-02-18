@@ -1,12 +1,12 @@
 import { Pokemon } from "./Pokemon";
 
-export class Team {
+export interface Team {
 
    _id?:  string;
 
-  public name?: string
+  name?: string
 
-  public pokemon?:Pokemon[]
+  pokemon?:Pokemon[]
 
 
 }

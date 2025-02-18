@@ -3,31 +3,36 @@ import { Pokemon } from "../types/Pokemon";
 
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { BottomState, usePokemonEditStoreInContext } from "./Context/PokemonEditContext";
 
-interface PokemonFormProps {
-  pokemon: Pokemon;
-}
 
-export default function PokemonForm({
-  pokemon,
- 
-}: PokemonFormProps) {
+
+export default function PokemonForm() {
   const [level, setLevel] = useState(100);
-  const [nickname, setNickname] = useState("");
-  const [ability, setAbility] = useState("");
   const [item, setItem] = useState("");
+  const setSearchText = usePokemonEditStoreInContext((state)=>state.setSearchText)
+  const pokemonSpecies = usePokemonEditStoreInContext((state)=>state.pokemonSpecies)
+  const setBottomState = usePokemonEditStoreInContext((state)=>state.setBottomState)
+  const ability = usePokemonEditStoreInContext((state)=>state.ability)
+  const nickname = usePokemonEditStoreInContext((state)=>state.nickname)
+  const setNickname = usePokemonEditStoreInContext((state)=>state.nickname)
+
+
+
+
+  
   return (
     <div>
       <div className="flex gap-16">
         <img
-          src={pokemon.pokemonSpecies?.teamBuilderSprite}
-          alt={pokemon.pokemonSpecies?.name || "Pokémon"}
+          src={pokemonSpecies?.teamBuilderSprite}
+          alt={pokemonSpecies?.name || "Pokémon"}
           className="w-36 h-26 object-contain transition-transform transform hover:scale-110"
         />
         <div className="space-y-4">
           <div className="mb-2">
             <div className="grid gap-1">
-              <Input value={pokemon.pokemonSpecies?.name} disabled />
+              <Input value={pokemonSpecies?.name} disabled />
 
               <Label htmlFor="nickname">Nickname</Label>
               <Input
@@ -62,13 +67,14 @@ export default function PokemonForm({
               <Label htmlFor="ability">Ability</Label>
               <Input
                 id="ability"
-                value={ability}
-                onChange={(e) => setAbility(e.target.value)}
+                value={ability?.name ? ability.name : ""}
+                onClick={(e)=> {setBottomState(BottomState.ABILITIES)}}
+                onChange={(e) => setSearchText(e.target.value)}
               />
             </div>
           </div>
           <div>
-            <p className="text-white">{pokemon.pokemonSpecies?.type?.map((x) => x)}</p>
+            <p className="text-white">{pokemonSpecies?.type?.map((x) => x)}</p>
           </div>
         </div>
       </div>
