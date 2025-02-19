@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pokemon } from '../types/Pokemon'
-import { BottomState, usePokemonEditStoreInContext } from './Context/PokemonEditContext';
+import { BottomState, usePokemonEditStoreInContext } from '../Context/PokemonEditContext';
 import StatBar from './StatBar';
 
 

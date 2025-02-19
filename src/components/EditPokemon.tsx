@@ -7,7 +7,7 @@ import EditStats from "./ViewStats";
 import {
   PokemonEditContextProvider,
   usePokemonEditStoreInContext,
-} from "./Context/PokemonEditContext";
+} from "../Context/PokemonEditContext";
 import { Button } from "./ui/button";
 import ViewStats from "./ViewStats";
 

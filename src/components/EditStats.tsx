@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePokemonEditStoreInContext } from './Context/PokemonEditContext';
+import { usePokemonEditStoreInContext } from '../Context/PokemonEditContext';
 import StatBarEdit from './StatBarEdit';
 
 export default function EditStats() {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Move } from "../types/Move";
 import { Pokemon } from "../types/Pokemon";
-import { usePokemonEditStoreInContext } from "./Context/PokemonEditContext";
+import { usePokemonEditStoreInContext } from "../Context/PokemonEditContext";
 import { useShallow } from "zustand/react/shallow";
 import {
   Table,

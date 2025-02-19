@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useRef, ReactNode } from 'react';
 import { createStore, useStore, StoreApi } from 'zustand';
-import { PokemonSpecies } from '../../types/PokemonSpecies';
-import { Ability } from '../../types/Ability';
-import { Move } from '../../types/Move';
-import { Stats } from '../../types/Stats';
+import { Ability } from '../types/Ability';
+import { Move } from '../types/Move';
+import { PokemonSpecies } from '../types/PokemonSpecies';
+import { Stats } from '../types/Stats';
+import { Pokemon } from '../types/Pokemon';
 import { gql, useMutation } from '@apollo/client';
-import { Pokemon } from '../../types/Pokemon';
 
 
 

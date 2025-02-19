@@ -3,7 +3,7 @@ import { Pokemon } from "../types/Pokemon";
 
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { BottomState, usePokemonEditStoreInContext } from "./Context/PokemonEditContext";
+import { BottomState, usePokemonEditStoreInContext } from "../Context/PokemonEditContext";
 
 
 

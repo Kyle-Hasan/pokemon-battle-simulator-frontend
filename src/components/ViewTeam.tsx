@@ -6,7 +6,7 @@ import { Pokemon } from "../types/Pokemon";
 import { PokemonSpecies } from "../types/PokemonSpecies";
 import { gql, useMutation } from "@apollo/client";
 import EditPokemon from "./EditPokemon";
-import { PokemonEditContextProvider, usePokemonEditStoreInContext } from "./Context/PokemonEditContext";
+import { PokemonEditContextProvider, usePokemonEditStoreInContext } from "../Context/PokemonEditContext";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";

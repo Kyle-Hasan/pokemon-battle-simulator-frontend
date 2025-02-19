@@ -3,7 +3,7 @@ import { Move } from "../types/Move";
 import { Pokemon } from "../types/Pokemon";
 import { Input } from "./ui/input";
 import MoveList from "./MoveList";
-import { BottomState, usePokemonEditStoreInContext } from "./Context/PokemonEditContext";
+import { BottomState, usePokemonEditStoreInContext } from "../Context/PokemonEditContext";
 import { stat } from "fs";
 
 

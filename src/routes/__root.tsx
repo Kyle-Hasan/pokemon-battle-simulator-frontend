@@ -8,6 +8,10 @@ export const Route = createRootRoute({
         <Link to="/" className="[&.active]:font-bold">
           Home
         </Link>{' '}
+
+        <Link to="/pokemonBattle/$battleId" params={{ battleId: '1' }} className="[&.active]:font-bold">
+          Battle
+        </Link>{' '}
         
       </div>
       <hr />
