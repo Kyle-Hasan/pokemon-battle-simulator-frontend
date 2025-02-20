@@ -47,7 +47,7 @@ export default function AbilityList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pokemonSpecies?.abilities?.map((a) => (
+          {pokemonSpecies?.abilities?.filter(a => a._id !== ability?._id)?.map((a) => (
             <TableRow
               className="hover:cursor-pointer"
               onClick={() => {

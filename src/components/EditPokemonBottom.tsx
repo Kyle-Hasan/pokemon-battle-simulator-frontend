@@ -1,7 +1,4 @@
-import React, { useState } from 'react'
-import { Pokemon } from '../types/Pokemon'
-import { Label } from './ui/label'
-import { Input } from './ui/input'
+
 import { BottomState, usePokemonEditStoreInContext } from '../Context/PokemonEditContext'
 import MoveList from './MoveList'
 import AbilityList from './AbilityList'

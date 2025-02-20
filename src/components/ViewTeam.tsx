@@ -25,6 +25,7 @@ const ADD_POKEMON = gql`
     $nickname: String!
     $pokemonSpecies: String!
     $moves: [String!]
+    $ability: String!
   ) {
     addPokemon(
       teamId: $teamId
@@ -32,10 +33,15 @@ const ADD_POKEMON = gql`
         nickname: $nickname
         pokemonSpecies: $pokemonSpecies
         moves: $moves
+        ability: $ability
       }
     ) {
       _id
       nickname
+      ability {
+        _id
+        name
+      }
       pokemonSpecies {
         _id
         name
@@ -159,12 +165,15 @@ export default function ViewTeam({ teamProp }: ViewTeamProps) {
 
 
   const handleAddPokemon = async (pokemonSpecies: PokemonSpecies) => {
+   
     const response = await addPokemon({
       variables: {
         teamId: team._id,
         nickname: "",
         pokemonSpecies: pokemonSpecies._id,
         moves: [],
+        level: 100,
+        ability: pokemonSpecies.abilities?.[0]?._id || ""
       },
     });
     if (!response || !response.data) {

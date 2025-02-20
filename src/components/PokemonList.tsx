@@ -12,6 +12,7 @@ const GET_POKEMON = gql`
     name
     teamBuilderSprite
     abilities{
+        _id
         name
     }
     type
