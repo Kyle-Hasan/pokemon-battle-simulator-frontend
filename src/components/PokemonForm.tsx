@@ -15,7 +15,7 @@ export default function PokemonForm() {
   const setBottomState = usePokemonEditStoreInContext((state)=>state.setBottomState)
   const ability = usePokemonEditStoreInContext((state)=>state.ability)
   const nickname = usePokemonEditStoreInContext((state)=>state.nickname)
-  const setNickname = usePokemonEditStoreInContext((state)=>state.nickname)
+  const setNickname = usePokemonEditStoreInContext((state)=>state.setNickname)
 
 
 

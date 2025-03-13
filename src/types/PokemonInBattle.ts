@@ -8,19 +8,21 @@ export interface PokemonInBattle {
 
   nickname?: string;
 
-  pokemonSpecies?: PokemonSpecies
+  pokemonSpecies?: PokemonSpecies;
 
-  moves: Move[] | string[]
+  moves: Move[] | string[];
 
-  ability:Ability | string
+  ability:Ability | string;
 
-  status:string
+  status:string;
 
-  teamBuilderSprite:string
+  teamBuilderSprite:string;
 
-  remainingHealth:number
+  remainingHealth:number;
 
-  maxHealth:number
+  maxHealth:number;
+
+  level:number;
 
 
 

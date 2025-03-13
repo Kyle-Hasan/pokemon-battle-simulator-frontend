@@ -1,44 +1,73 @@
-import React, { createContext, useContext, useRef, ReactNode } from 'react';
-import { createStore, useStore, StoreApi } from 'zustand';
-import { Ability } from '../types/Ability';
-import { Move } from '../types/Move';
-import { PokemonSpecies } from '../types/PokemonSpecies';
-import { Stats } from '../types/Stats';
-import { Pokemon } from '../types/Pokemon';
-import { gql, useMutation } from '@apollo/client';
+import React, { createContext, useContext, useRef, ReactNode } from "react";
+import { createStore, useStore, StoreApi } from "zustand";
 
-
-
-
+import { PokemonInBattle } from "../types/PokemonInBattle";
+import { BattleTeam } from "../types/BattleTeam";
+import { PlayerInfo } from "../types/PlayerInfo";
+import { Environment } from "../types/Environment";
+// split up state to reduce the amount of re renders needed
 interface PokemonBattleState {
   
-
+  playerActivePokemon: PokemonInBattle | null;
+  enemyActivePokemon: PokemonInBattle | null;
+  setPlayerActivePokemon: (pokemon: PokemonInBattle) => void;
+  setEnemyActivePokemon: (pokemon: PokemonInBattle) => void;
+  playerTeam: BattleTeam | null;
+  setPlayerTeam: (playerTeam:BattleTeam) => void;
+  enemyTeam:BattleTeam | null;
+  setEnemyTeam: (enemyTeam:BattleTeam) => void;
+  playerTrainerInfo:PlayerInfo | null
+  setPlayerTrainerInfo:(playerTrainerInfo:PlayerInfo) => void;
+  enemyTrainerInfo:PlayerInfo | null
+  setEnemyTrainerInfo:(enemyTrainerInfo:PlayerInfo) => void;
+  playerFreeSwitch:boolean;
+  setPlayerFreeSwitch:(playerFreeSwitch:boolean) => void;
+  enemyFreeSwitch:boolean;
+  setEnemyFreeSwitch: (enemyFreeSwitch:boolean) => void;
+  turnNumber:number;
+  setTurnNumber: (turnNumber:number) => void;
+  environment:Environment | null
+  setEnvironment:(environment:Environment) => void;
 }
 
-
-export const PokemonBattleContext = createContext<StoreApi<PokemonBattleState> | null>(null);
+export const PokemonBattleContext =
+  createContext<StoreApi<PokemonBattleState> | null>(null);
 
 interface PokemonBattleProviderProps {
   children: ReactNode;
 }
 
-
-
-
-
-
-export const PokemonBattleContextProvider = ({ children }: PokemonBattleProviderProps) => {
+export const PokemonBattleContextProvider = ({
+  children,
+}: PokemonBattleProviderProps) => {
   const storeRef = useRef<StoreApi<PokemonBattleState>>(null);
-
-
-
-
-
-
 
   if (!storeRef.current) {
     storeRef.current = createStore<PokemonBattleState>((set) => ({
- 
+      
+      playerActivePokemon: null,
+      enemyActivePokemon: null,
+      setPlayerActivePokemon: (pokemon: PokemonInBattle) =>
+        set({ playerActivePokemon: pokemon }),
+      setEnemyActivePokemon: (pokemon: PokemonInBattle) =>
+        set({ enemyActivePokemon: pokemon }),
+      playerTeam: null,
+      enemyTeam: null,
+      setPlayerTeam: (playerTeam:BattleTeam)=> set({playerTeam}),
+      setEnemyTeam: (enemyTeam:BattleTeam) => set({enemyTeam}),
+      playerTrainerInfo: null,
+      setPlayerTrainerInfo: (playerTrainerInfo:PlayerInfo) => set({playerTrainerInfo}),
+      enemyTrainerInfo: null,
+      setEnemyTrainerInfo: (enemyTrainerInfo:PlayerInfo) => set({enemyTrainerInfo}),
+      playerFreeSwitch:false,
+      setPlayerFreeSwitch: (playerFreeSwitch:boolean) => set({playerFreeSwitch}),
+      enemyFreeSwitch:false,
+      setEnemyFreeSwitch: (enemyFreeSwitch:boolean) => set({enemyFreeSwitch}),
+      environment:null,
+      setEnvironment: (environment:Environment) => set({environment}),
+      turnNumber: 0,
+      setTurnNumber: (turnNumber:number) => set({turnNumber})
+
       
 
     }));
@@ -50,10 +79,12 @@ export const PokemonBattleContextProvider = ({ children }: PokemonBattleProvider
   );
 };
 
-export const usePokemonBattleStoreInContext = <T,>(selector: (state: PokemonBattleState) => T): T => {
+export const usePokemonBattleStoreInContext = <T,>(
+  selector: (state: PokemonBattleState) => T
+): T => {
   const store = useContext(PokemonBattleContext);
   if (!store) {
-    throw new Error('Missing StoreProvider');
+    throw new Error("Missing StoreProvider");
   }
   return useStore(store, selector);
 };
