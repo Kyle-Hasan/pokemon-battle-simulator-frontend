@@ -1,9 +1,10 @@
 import React from "react";
+import { Status } from "../../types/Status";
 interface pokemonStatusBarProps {
   name: string;
   percentHealth: number;
   level: number;
-  status: string;
+  status: Status;
 }
 export default function PokemonStatusBars({
   name,
@@ -23,7 +24,7 @@ export default function PokemonStatusBars({
         </div>
         <div className=" px-1 h-4 text-xs rounded-md">{percentHealth}%</div>
       </div>
-      <div>{status}</div>
+     
     </div>
   );
 }

@@ -7,27 +7,28 @@ import { PlayerInfo } from "../types/PlayerInfo";
 import { Environment } from "../types/Environment";
 // split up state to reduce the amount of re renders needed
 interface PokemonBattleState {
-  
+  battleId: string;
+  setBattleId(battleId: string): void;
   playerActivePokemon: PokemonInBattle | null;
   enemyActivePokemon: PokemonInBattle | null;
-  setPlayerActivePokemon: (pokemon: PokemonInBattle) => void;
-  setEnemyActivePokemon: (pokemon: PokemonInBattle) => void;
+  setPlayerActivePokemon: (pokemon: PokemonInBattle | null) => void;
+  setEnemyActivePokemon: (pokemon: PokemonInBattle | null) => void;
   playerTeam: BattleTeam | null;
-  setPlayerTeam: (playerTeam:BattleTeam) => void;
-  enemyTeam:BattleTeam | null;
-  setEnemyTeam: (enemyTeam:BattleTeam) => void;
-  playerTrainerInfo:PlayerInfo | null
-  setPlayerTrainerInfo:(playerTrainerInfo:PlayerInfo) => void;
-  enemyTrainerInfo:PlayerInfo | null
-  setEnemyTrainerInfo:(enemyTrainerInfo:PlayerInfo) => void;
-  playerFreeSwitch:boolean;
-  setPlayerFreeSwitch:(playerFreeSwitch:boolean) => void;
-  enemyFreeSwitch:boolean;
-  setEnemyFreeSwitch: (enemyFreeSwitch:boolean) => void;
-  turnNumber:number;
-  setTurnNumber: (turnNumber:number) => void;
-  environment:Environment | null
-  setEnvironment:(environment:Environment) => void;
+  setPlayerTeam: (playerTeam: BattleTeam) => void;
+  enemyTeam: BattleTeam | null;
+  setEnemyTeam: (enemyTeam: BattleTeam) => void;
+  playerTrainerInfo: PlayerInfo | null;
+  setPlayerTrainerInfo: (playerTrainerInfo: PlayerInfo) => void;
+  enemyTrainerInfo: PlayerInfo | null;
+  setEnemyTrainerInfo: (enemyTrainerInfo: PlayerInfo) => void;
+  playerFreeSwitch: boolean;
+  setPlayerFreeSwitch: (playerFreeSwitch: boolean) => void;
+  enemyFreeSwitch: boolean;
+  setEnemyFreeSwitch: (enemyFreeSwitch: boolean) => void;
+  turnNumber: number;
+  setTurnNumber: (turnNumber: number) => void;
+  environment: Environment | null;
+  setEnvironment: (environment: Environment) => void;
 }
 
 export const PokemonBattleContext =
@@ -44,32 +45,34 @@ export const PokemonBattleContextProvider = ({
 
   if (!storeRef.current) {
     storeRef.current = createStore<PokemonBattleState>((set) => ({
-      
+      battleId: "",
+      setBattleId: (battleId: string) => set({ battleId }),
       playerActivePokemon: null,
       enemyActivePokemon: null,
-      setPlayerActivePokemon: (pokemon: PokemonInBattle) =>
+      setPlayerActivePokemon: (pokemon: PokemonInBattle | null) =>
         set({ playerActivePokemon: pokemon }),
-      setEnemyActivePokemon: (pokemon: PokemonInBattle) =>
+      setEnemyActivePokemon: (pokemon: PokemonInBattle | null) =>
         set({ enemyActivePokemon: pokemon }),
       playerTeam: null,
       enemyTeam: null,
-      setPlayerTeam: (playerTeam:BattleTeam)=> set({playerTeam}),
-      setEnemyTeam: (enemyTeam:BattleTeam) => set({enemyTeam}),
+      setPlayerTeam: (playerTeam: BattleTeam) => set({ playerTeam }),
+      setEnemyTeam: (enemyTeam: BattleTeam) => set({ enemyTeam }),
       playerTrainerInfo: null,
-      setPlayerTrainerInfo: (playerTrainerInfo:PlayerInfo) => set({playerTrainerInfo}),
+      setPlayerTrainerInfo: (playerTrainerInfo: PlayerInfo) =>
+        set({ playerTrainerInfo }),
       enemyTrainerInfo: null,
-      setEnemyTrainerInfo: (enemyTrainerInfo:PlayerInfo) => set({enemyTrainerInfo}),
-      playerFreeSwitch:false,
-      setPlayerFreeSwitch: (playerFreeSwitch:boolean) => set({playerFreeSwitch}),
-      enemyFreeSwitch:false,
-      setEnemyFreeSwitch: (enemyFreeSwitch:boolean) => set({enemyFreeSwitch}),
-      environment:null,
-      setEnvironment: (environment:Environment) => set({environment}),
+      setEnemyTrainerInfo: (enemyTrainerInfo: PlayerInfo) =>
+        set({ enemyTrainerInfo }),
+      playerFreeSwitch: false,
+      setPlayerFreeSwitch: (playerFreeSwitch: boolean) =>
+        set({ playerFreeSwitch }),
+      enemyFreeSwitch: false,
+      setEnemyFreeSwitch: (enemyFreeSwitch: boolean) =>
+        set({ enemyFreeSwitch }),
+      environment: null,
+      setEnvironment: (environment: Environment) => set({ environment }),
       turnNumber: 0,
-      setTurnNumber: (turnNumber:number) => set({turnNumber})
-
-      
-
+      setTurnNumber: (turnNumber: number) => set({ turnNumber }),
     }));
   }
   return (

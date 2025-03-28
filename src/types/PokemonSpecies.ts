@@ -14,7 +14,9 @@ export interface PokemonSpecies {
     
     baseStats: Stats;
   
-    battleSprite: string;
+    battleFrontSprite: string;
+
+    battleBackSprite:string;
   
   
      menuSprite: string;

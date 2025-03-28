@@ -1,6 +1,7 @@
 import { Ability } from "./Ability";
 import { Move } from "./Move";
 import { PokemonSpecies } from "./PokemonSpecies";
+import { Stats } from "./Stats";
 
 export interface Pokemon {
 
@@ -8,10 +9,14 @@ export interface Pokemon {
 
   nickname?: string;
 
-  pokemonSpecies?: PokemonSpecies
+  pokemonSpecies?: PokemonSpecies;
 
-  moves: Move[] | string[]
+  moves: Move[] | string[];
 
-  ability:Ability | string
+  ability:Ability | string;
+
+  stats:Stats;
+
+  level:number;
 
 }

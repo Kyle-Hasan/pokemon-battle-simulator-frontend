@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PokemonBattleView from '../components/PokemonBattle/PokemonBattleView'
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import {Battle} from '../types/Battle'
 import { PokemonBattleContext, PokemonBattleContextProvider } from '../Context/PokemonBattleContext';
 export const Route = createFileRoute('/pokemonBattle/$battleId')({
@@ -12,8 +12,12 @@ export const Route = createFileRoute('/pokemonBattle/$battleId')({
 const CREATE_BATTLE = gql`
   mutation RandomBattle {
     randomBattle {
-        id
-        team1 {
+        battleId
+        playerSwitch
+        enemySwitch
+        turnNumber
+        playerTeam {
+            totalPokemon
             pokemonInBattle {
                 remainingHealth
                 isActive
@@ -21,6 +25,23 @@ const CREATE_BATTLE = gql`
                     _id
                     nickname
                     level
+                    stats {
+                        hp
+                        attack
+                        defense
+                        specialAttack
+                        specialDefense
+                        speed
+                    }
+                    pokemonSpecies {
+                        _id
+                        name
+                        battleBackSprite
+                        battleFrontSprite
+                        menuSprite
+                        teamBuilderSprite
+                        type
+                    }
                     moves {
                         _id
                         name
@@ -32,6 +53,32 @@ const CREATE_BATTLE = gql`
                         contact
                         animation
                     }
+                    ability {
+                        _id
+                        name
+                        description
+                        animation
+                    }
+                }
+            }
+        }
+        enemyTeam {
+            totalPokemon
+            pokemonInBattle {
+                remainingHealth
+                isActive
+                pokemon {
+                    _id
+                    nickname
+                    level
+                    stats {
+                        hp
+                        attack
+                        defense
+                        specialAttack
+                        specialDefense
+                        speed
+                    }
                     pokemonSpecies {
                         _id
                         name
@@ -41,17 +88,27 @@ const CREATE_BATTLE = gql`
                         teamBuilderSprite
                         type
                     }
+                    moves {
+                        _id
+                        name
+                        description
+                        type
+                        basePower
+                        accuracy
+                        category
+                        contact
+                        animation
+                    }
+                    ability {
+                        _id
+                        name
+                        description
+                        animation
+                    }
                 }
-            }
-        }
-        team2 {
-            pokemonInBattle {
-                remainingHealth
-                isActive
-                pokemon {
-                    _id
-                    nickname
-                    level
+                status {
+                    primary
+                    confused
                 }
             }
         }
@@ -64,6 +121,12 @@ const CREATE_BATTLE = gql`
                 type
                 duration
             }
+            hazards {
+                spikes
+                toxicSpikes
+                stealthRock
+                stickyWeb
+            }
             fieldEffects {
                 trickRoom
                 gravity
@@ -72,12 +135,14 @@ const CREATE_BATTLE = gql`
                 reflect
                 safeguard
             }
-            hazards {
-                spikes
-                toxicSpikes
-                stealthRock
-                stickyWeb
-            }
+        }
+        playerInfo {
+            playerName
+            playerAvatarURL
+        }
+        enemyInfo {
+            playerName
+            playerAvatarURL
         }
     }
 }
@@ -88,23 +153,29 @@ interface CreateBattle {
 }
 export default function PokemonBattle() {
   const {battleId} = Route.useParams()
-  const {data,loading,error} = useQuery<CreateBattle>(CREATE_BATTLE)
+  const[getBattle] = useMutation<CreateBattle>(CREATE_BATTLE)
+  const [battle,setBattle] = useState<Battle | null>(null)
+
+useEffect(()=> {
+    const fetch = async()=> {
+      
+        const res = await getBattle()
+        setBattle(res.data?.randomBattle ?? null)
+    }
+    fetch()
+} , [getBattle])
 
 
 
-  if(loading) {
-    return <div></div>
-  }
-
-  else if(error) {
-    return <div></div>
-  }
-
-  return (
-    <div className='w-full h-screen'>
-    <PokemonBattleContextProvider>
-   <PokemonBattleView battle={data as unknown as Battle}/>
-   </PokemonBattleContextProvider>
-   </div>
-  )
+return (
+    <>
+      {battle && (
+        <div className="w-full h-screen">
+          <PokemonBattleContextProvider>
+            <PokemonBattleView battle={battle} />
+          </PokemonBattleContextProvider>
+        </div>
+      )}
+    </>
+  );
 }

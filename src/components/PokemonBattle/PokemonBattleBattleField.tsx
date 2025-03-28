@@ -9,29 +9,324 @@ import { PokemonInBattle } from "../../types/PokemonInBattle";
 import PokemonStatusBars from "./PokemonStatusBars";
 import { Battle } from "../../types/Battle";
 import { usePokemonBattleStoreInContext } from "../../Context/PokemonBattleContext";
+import { gql, useMutation, useSubscription } from "@apollo/client";
+
+const MAKE_MOVE = gql`
+  mutation UpdateBattle(
+    $battleId: String!
+    $userId: String!
+    $pokemonId: String!
+    $moveId: String!
+    $isMove: Boolean
+    $switchPokemonId: String!
+  ) {
+    updateBattle(
+        moveInput: {
+            battleId: $battleId
+            userId: $userId
+            pokemonId: $pokemonId
+            isMove: $isMove
+            moveId: $moveId
+            switchPokemonId: $switchPokemonId
+        }
+    )
+}
+`;
+
+
+
+const BATTLE_UPDATE_SUBSCRIPTION = gql`
+  subscription BattleUpdate2($battleId: ID) {
+    battleUpdate(battleId: $battleId) {
+      movedFirst
+      playerFreeSwitch
+      enemyFreeSwitch
+      playerDamage
+      enemyDamage
+      playerLost
+      enemyLost
+      turnNumber
+      changedPlayerPokemon {
+        remainingHealth
+        isActive
+        pokemon {
+          _id
+          nickname
+          level
+          stats {
+            hp
+            attack
+            defense
+            specialAttack
+            specialDefense
+            speed
+          }
+          pokemonSpecies {
+            _id
+            name
+            battleBackSprite
+            battleFrontSprite
+            menuSprite
+            teamBuilderSprite
+            type
+            baseStats {
+              hp
+              attack
+              defense
+              specialAttack
+              specialDefense
+              speed
+            }
+            learnableMoves {
+              _id
+              name
+              description
+              type
+              basePower
+              accuracy
+              category
+              contact
+              animation
+              pp {
+                base
+                max
+              }
+            }
+            abilities {
+              _id
+              name
+              description
+              animation
+              effects
+            }
+          }
+          moves {
+            _id
+            name
+            description
+            type
+            basePower
+            accuracy
+            category
+            contact
+            animation
+            pp {
+              base
+              max
+            }
+          }
+          ability {
+            _id
+            name
+            description
+            animation
+            effects
+          }
+        }
+        status {
+          primary
+          confused
+        }
+        statStages {
+          hp
+          attack
+          defense
+          specialAttack
+          specialDefense
+          speed
+        }
+      }
+      changedEnemyPokemon {
+        remainingHealth
+        isActive
+        pokemon {
+          _id
+          nickname
+          level
+          stats {
+            hp
+            attack
+            defense
+            specialAttack
+            specialDefense
+            speed
+          }
+          pokemonSpecies {
+            _id
+            name
+            battleBackSprite
+            battleFrontSprite
+            menuSprite
+            teamBuilderSprite
+            type
+            baseStats {
+              hp
+              attack
+              defense
+              specialAttack
+              specialDefense
+              speed
+            }
+            learnableMoves {
+              _id
+              name
+              description
+              type
+              basePower
+              accuracy
+              category
+              contact
+              animation
+              pp {
+                base
+                max
+              }
+            }
+            abilities {
+              _id
+              name
+              description
+              animation
+              effects
+            }
+          }
+          moves {
+            _id
+            name
+            description
+            type
+            basePower
+            accuracy
+            category
+            contact
+            animation
+            pp {
+              base
+              max
+            }
+          }
+          ability {
+            _id
+            name
+            description
+            animation
+            effects
+          }
+        }
+        status {
+          primary
+          confused
+        }
+        statStages {
+          hp
+          attack
+          defense
+          specialAttack
+          specialDefense
+          speed
+        }
+      }
+      environment {
+        weather {
+          type
+          duration
+        }
+        terrain {
+          type
+          duration
+        }
+        hazards {
+          spikes
+          toxicSpikes
+          stealthRock
+          stickyWeb
+        }
+        fieldEffects {
+          trickRoom
+          gravity
+          tailwind
+          lightScreen
+          reflect
+          safeguard
+        }
+      }
+      playerMoveUsed {
+        _id
+        name
+        description
+        type
+        basePower
+        accuracy
+        category
+        contact
+        animation
+        pp {
+          base
+          max
+        }
+      }
+      enemyMoveUsed {
+        _id
+        name
+        description
+        type
+        basePower
+        accuracy
+        category
+        contact
+        animation
+        pp {
+          base
+          max
+        }
+      }
+    }
+  }
+`;
 
 
 
 export default function PokemonBattleBattleField() {
 
 
-
-
-
-  const playerTeam = usePokemonBattleStoreInContext((state)=> state.playerTeam)
-  const enemyTeam = usePokemonBattleStoreInContext((state)=> state.enemyTeam)
-  const playerFreeSwitch = usePokemonBattleStoreInContext((state)=> state.playerFreeSwitch)
-  const enemyFreeSwitch = usePokemonBattleStoreInContext((state)=> state.enemyFreeSwitch)
-  const playerActivePokemon = usePokemonBattleStoreInContext((state)=> state.playerActivePokemon)
-  const enemyActivePokemon = usePokemonBattleStoreInContext((state)=> state.enemyActivePokemon)
-  const playerTrainerInfo = usePokemonBattleStoreInContext((state)=> state.playerTrainerInfo)
-  const enemyTrainerInfo = usePokemonBattleStoreInContext((state)=> state.enemyTrainerInfo)
-  
+  const [makeMove] = useMutation(MAKE_MOVE);
 
   
 
-  const onMoveClick = (move: Move) => {
-    console.log("A move was click", move);
+  const playerTeam = usePokemonBattleStoreInContext((state)=> state.playerTeam);
+  const enemyTeam = usePokemonBattleStoreInContext((state)=> state.enemyTeam);
+  const playerFreeSwitch = usePokemonBattleStoreInContext((state)=> state.playerFreeSwitch);
+  const enemyFreeSwitch = usePokemonBattleStoreInContext((state)=> state.enemyFreeSwitch);
+  const playerActivePokemon = usePokemonBattleStoreInContext((state)=> state.playerActivePokemon);
+  const enemyActivePokemon = usePokemonBattleStoreInContext((state)=> state.enemyActivePokemon);
+  const playerTrainerInfo = usePokemonBattleStoreInContext((state)=> state.playerTrainerInfo);
+  const enemyTrainerInfo = usePokemonBattleStoreInContext((state)=> state.enemyTrainerInfo);
+  const battleId = usePokemonBattleStoreInContext((state)=> state.battleId);
+
+
+  useSubscription(BATTLE_UPDATE_SUBSCRIPTION, {
+    variables: { battleId },
+    onSubscriptionData: ({ subscriptionData }) => {
+      if (subscriptionData.data) {
+        console.log("data");
+      }
+    },
+  });
+  
+
+  console.log("active pokemon ", playerActivePokemon)
+
+  const onMoveClick = async(move: Move) => {
+    await makeMove( {
+      variables: {
+      moveId: move._id,
+      isMove:true,
+      pokemonId:playerActivePokemon?.pokemon._id,
+      switchPokemonId:"",
+      battleId,
+      userId:"67abe4c8201f9cd643c552bf"
+    }});
+    
   };
   return (
     <div
@@ -47,17 +342,19 @@ export default function PokemonBattleBattleField() {
 
       {/*Opponent Team*/}
       <div className="ml-[50%]">
+      <div className="flex gap-12">
       { enemyActivePokemon &&
-        <div className="flex gap-12">
+     
            <div>
             <PokemonStatusBars
-              name={enemyActivePokemon?.pokemonSpecies?.name ?? ""}
-              level={enemyActivePokemon?.level}
+              name={enemyActivePokemon.pokemon?.pokemonSpecies?.name ?? ""}
+              level={enemyActivePokemon.pokemon?.level}
               status={enemyActivePokemon?.status}
-              percentHealth={enemyActivePokemon?.remainingHealth}
+              percentHealth={enemyActivePokemon?.remainingHealth / enemyActivePokemon.pokemon.stats.hp * 100}
             ></PokemonStatusBars>
-            <PokemonSprite pokemonSpriteLink={enemyActivePokemon?.pokemonSpecies?.battleSprite ?? ""} />
+            <PokemonSprite pokemonSpriteLink={enemyActivePokemon?.pokemon.pokemonSpecies?.battleFrontSprite ?? ""} />
           </div>
+      }
           <ShowTrainerInfo
             trainerName={enemyTrainerInfo?.playerName ?? ""}
             trainerImageLink="https://play.pokemonshowdown.com/sprites/trainers/acetrainer-gen4.png"
@@ -65,7 +362,7 @@ export default function PokemonBattleBattleField() {
               "https://play.pokemonshowdown.com/sprites/gen5icons/29.png",
             ]}
           /> 
-        </div> }
+        </div> 
       </div>
       {/*Your Team*/}
       <div className="ml-4">
@@ -77,20 +374,24 @@ export default function PokemonBattleBattleField() {
               "https://play.pokemonshowdown.com/sprites/gen5icons/29.png",
             ]}
           />
+
+          {playerActivePokemon &&
           <div className="self-end">
             <PokemonStatusBars
-              name="oshawott"
-              level={100}
-              status="burn"
-              percentHealth={45}
+              name={playerActivePokemon.pokemon.pokemonSpecies?.name ?? ""}
+              level={45}
+              status={playerActivePokemon.status}
+              percentHealth={playerActivePokemon.remainingHealth / playerActivePokemon.pokemon.stats.hp * 100}
             ></PokemonStatusBars>
-            <PokemonSprite pokemonSpriteLink="https://play.pokemonshowdown.com/sprites/gen5ani-back/oshawott.gif" />
+            <PokemonSprite pokemonSpriteLink={playerActivePokemon.pokemon?.pokemonSpecies?.battleBackSprite ?? ""} />
           </div>
+
+            }
         </div>
 
         <div></div>
         <div className="ml-[15%]">
-           { playerActivePokemon && <MoveSelector moves={playerActivePokemon?.moves as Move[]} onClick={onMoveClick}></MoveSelector>}
+           { playerActivePokemon && <MoveSelector moves={playerActivePokemon.pokemon?.moves as Move[]} onClick={onMoveClick}></MoveSelector>}
           <InBattleTeamDisplay team={playerTeam?.pokemonInBattle ?? []}></InBattleTeamDisplay>
         </div>
       </div>

@@ -1,29 +1,30 @@
 import { Ability } from "./Ability";
 import { Move } from "./Move";
+import { Pokemon } from "./Pokemon";
 import { PokemonSpecies } from "./PokemonSpecies";
+import { Stats } from "./Stats";
+import { Status } from "./Status";
+
 
 export interface PokemonInBattle {
 
-  _id?: string;
+  
+    pokemon:  Pokemon;
 
-  nickname?: string;
+ 
+    status: Status;
 
-  pokemonSpecies?: PokemonSpecies;
 
-  moves: Move[] | string[];
+    remainingHealth:number;
 
-  ability:Ability | string;
 
-  status:string;
+    isActive :boolean;
 
-  teamBuilderSprite:string;
-
-  remainingHealth:number;
-
-  maxHealth:number;
-
-  level:number;
+  
+    statStage:Stats;
 
 
 
+
+  
 }
