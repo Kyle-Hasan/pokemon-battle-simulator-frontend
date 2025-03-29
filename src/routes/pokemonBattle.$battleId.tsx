@@ -12,7 +12,7 @@ export const Route = createFileRoute('/pokemonBattle/$battleId')({
 const CREATE_BATTLE = gql`
   mutation RandomBattle {
     randomBattle {
-        battleId
+        id
         playerSwitch
         enemySwitch
         turnNumber

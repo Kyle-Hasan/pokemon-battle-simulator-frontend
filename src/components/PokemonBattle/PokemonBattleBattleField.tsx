@@ -6,6 +6,7 @@ import { Move } from "../../types/Move";
 import { PokemonType } from "../../types/PokemonType";
 import InBattleTeamDisplay from "./InBattleTeamDisplay";
 import { PokemonInBattle } from "../../types/PokemonInBattle";
+import { BattleUpdatePlayer } from "../../types/BattleUpdatePlayer";
 import PokemonStatusBars from "./PokemonStatusBars";
 import { Battle } from "../../types/Battle";
 import { usePokemonBattleStoreInContext } from "../../Context/PokemonBattleContext";
@@ -13,12 +14,12 @@ import { gql, useMutation, useSubscription } from "@apollo/client";
 
 const MAKE_MOVE = gql`
   mutation UpdateBattle(
-    $battleId: String!
-    $userId: String!
-    $pokemonId: String!
-    $moveId: String!
-    $isMove: Boolean
-    $switchPokemonId: String!
+    $battleId: ID!
+    $userId: ID!
+    $pokemonId: ID!
+    $moveId: ID!
+    $isMove: Boolean!
+    $switchPokemonId: ID!
   ) {
     updateBattle(
         moveInput: {
@@ -36,161 +37,139 @@ const MAKE_MOVE = gql`
 
 
 const BATTLE_UPDATE_SUBSCRIPTION = gql`
-  subscription BattleUpdate2($battleId: ID) {
+  subscription BattleUpdate($battleId: String!) {
     battleUpdate(battleId: $battleId) {
-      movedFirst
-      playerFreeSwitch
-      enemyFreeSwitch
-      playerDamage
-      enemyDamage
-      playerLost
-      enemyLost
-      turnNumber
-      changedPlayerPokemon {
-        remainingHealth
-        isActive
-        pokemon {
-          _id
-          nickname
-          level
-          stats {
-            hp
-            attack
-            defense
-            specialAttack
-            specialDefense
-            speed
-          }
-          pokemonSpecies {
-            _id
-            name
-            battleBackSprite
-            battleFrontSprite
-            menuSprite
-            teamBuilderSprite
-            type
-            baseStats {
-              hp
-              attack
-              defense
-              specialAttack
-              specialDefense
-              speed
+      battleId
+        movedFirst
+        playerFreeSwitch
+        enemyFreeSwitch
+        playerDamage
+        enemyDamage
+        playerLost
+        enemyLost
+        turnNumber
+        changedPlayerPokemon {
+            remainingHealth
+            isActive
+            pokemon {
+                _id
+                nickname
+                level
+                stats {
+                    hp
+                    attack
+                    defense
+                    specialAttack
+                    specialDefense
+                    speed
+                }
+                pokemonSpecies {
+                    _id
+                    name
+                    battleBackSprite
+                    battleFrontSprite
+                    menuSprite
+                    teamBuilderSprite
+                    type
+                }
+                moves {
+                    _id
+                    name
+                    description
+                    type
+                    basePower
+                    accuracy
+                    category
+                    contact
+                    animation
+                    pp {
+                        base
+                        max
+                    }
+                }
+                ability {
+                    _id
+                    name
+                    description
+                    animation
+                }
             }
-            learnableMoves {
-              _id
-              name
-              description
-              type
-              basePower
-              accuracy
-              category
-              contact
-              animation
-              pp {
-                base
-                max
-              }
+            status {
+                primary
+                confused
             }
-            abilities {
-              _id
-              name
-              description
-              animation
-              effects
+            statStages {
+                hp
+                attack
+                defense
+                specialAttack
+                specialDefense
+                speed
             }
-          }
-          moves {
-            _id
-            name
-            description
-            type
-            basePower
-            accuracy
-            category
-            contact
-            animation
-            pp {
-              base
-              max
-            }
-          }
-          ability {
-            _id
-            name
-            description
-            animation
-            effects
-          }
         }
-        status {
-          primary
-          confused
+        changedEnemyPokemon {
+            remainingHealth
+            isActive
+            pokemon {
+                _id
+                nickname
+                level
+                stats {
+                    hp
+                    attack
+                    defense
+                    specialAttack
+                    specialDefense
+                    speed
+                }
+                pokemonSpecies {
+                    _id
+                    name
+                    battleBackSprite
+                    battleFrontSprite
+                    menuSprite
+                    teamBuilderSprite
+                    type
+                }
+            }
+            status {
+                primary
+                confused
+            }
+            statStages {
+                hp
+                attack
+                defense
+                specialAttack
+                specialDefense
+                speed
+            }
         }
-        statStages {
-          hp
-          attack
-          defense
-          specialAttack
-          specialDefense
-          speed
+        environment {
+            weather {
+                type
+                duration
+            }
+            terrain {
+                type
+                duration
+            }
+            hazards {
+                spikes
+                toxicSpikes
+                stealthRock
+                stickyWeb
+            }
+            fieldEffects {
+                trickRoom
+                gravity
+                tailwind
+                lightScreen
+                reflect
+                safeguard
+            }
         }
-      }
-      changedEnemyPokemon {
-        remainingHealth
-        isActive
-        pokemon {
-          _id
-          nickname
-          level
-          stats {
-            hp
-            attack
-            defense
-            specialAttack
-            specialDefense
-            speed
-          }
-          pokemonSpecies {
-            _id
-            name
-            battleBackSprite
-            battleFrontSprite
-            menuSprite
-            teamBuilderSprite
-            type
-            baseStats {
-              hp
-              attack
-              defense
-              specialAttack
-              specialDefense
-              speed
-            }
-            learnableMoves {
-              _id
-              name
-              description
-              type
-              basePower
-              accuracy
-              category
-              contact
-              animation
-              pp {
-                base
-                max
-              }
-            }
-            abilities {
-              _id
-              name
-              description
-              animation
-              effects
-            }
-          }
-          moves {
+        playerMoveUsed {
             _id
             name
             description
@@ -200,86 +179,18 @@ const BATTLE_UPDATE_SUBSCRIPTION = gql`
             category
             contact
             animation
-            pp {
-              base
-              max
-            }
-          }
-          ability {
+        }
+        enemyMoveUsed {
             _id
             name
             description
+            type
+            basePower
+            accuracy
+            category
+            contact
             animation
-            effects
-          }
         }
-        status {
-          primary
-          confused
-        }
-        statStages {
-          hp
-          attack
-          defense
-          specialAttack
-          specialDefense
-          speed
-        }
-      }
-      environment {
-        weather {
-          type
-          duration
-        }
-        terrain {
-          type
-          duration
-        }
-        hazards {
-          spikes
-          toxicSpikes
-          stealthRock
-          stickyWeb
-        }
-        fieldEffects {
-          trickRoom
-          gravity
-          tailwind
-          lightScreen
-          reflect
-          safeguard
-        }
-      }
-      playerMoveUsed {
-        _id
-        name
-        description
-        type
-        basePower
-        accuracy
-        category
-        contact
-        animation
-        pp {
-          base
-          max
-        }
-      }
-      enemyMoveUsed {
-        _id
-        name
-        description
-        type
-        basePower
-        accuracy
-        category
-        contact
-        animation
-        pp {
-          base
-          max
-        }
-      }
     }
   }
 `;
@@ -302,16 +213,55 @@ export default function PokemonBattleBattleField() {
   const playerTrainerInfo = usePokemonBattleStoreInContext((state)=> state.playerTrainerInfo);
   const enemyTrainerInfo = usePokemonBattleStoreInContext((state)=> state.enemyTrainerInfo);
   const battleId = usePokemonBattleStoreInContext((state)=> state.battleId);
+  const setEnemyActivePokemon = usePokemonBattleStoreInContext((state)=> state.setEnemyActivePokemon);
+  const setPlayerActivePokemon = usePokemonBattleStoreInContext((state)=> state.setPlayerActivePokemon);
+  const setEnvironment = usePokemonBattleStoreInContext((state)=> state.setEnvironment);
+  const setPlayerFreeSwitch = usePokemonBattleStoreInContext((state)=> state.setPlayerFreeSwitch);
+  const setEnemyFreeSwitch = usePokemonBattleStoreInContext((state)=> state.setEnemyFreeSwitch);
+  const setEnemyTeam = usePokemonBattleStoreInContext((state)=> state.setEnemyTeam);
+  const setPlayerTeam = usePokemonBattleStoreInContext((state)=> state.setPlayerTeam);
+
+  console.log(" battle id  " , battleId)
 
 
   useSubscription(BATTLE_UPDATE_SUBSCRIPTION, {
     variables: { battleId },
-    onSubscriptionData: ({ subscriptionData }) => {
-      if (subscriptionData.data) {
-        console.log("data");
-      }
+    onData: ({ data} ) => {
+      const {battleUpdate}= data.data as {battleUpdate:BattleUpdatePlayer};
+     
+     console.log("subscribe data" , battleUpdate);
+     updateStateAfterMove(battleUpdate);
     },
-  });
+    onError: (error)=> {
+      debugger
+      console.error(error)
+    }
+   
+   
+  }); 
+
+
+  const updateStateAfterMove = (battleUpdate:BattleUpdatePlayer)=> {
+
+    const {changedEnemyPokemon,changedPlayerPokemon,environment,playerMoveUsed,enemyMoveUsed} = battleUpdate;
+
+    // keep track of switches (implement later)
+    const playerPokemonChanged = changedPlayerPokemon[0].pokemon._id === playerActivePokemon?.pokemon._id;
+    const enemyPokemonChanged = changedEnemyPokemon[0].pokemon._id === enemyActivePokemon?.pokemon._id;
+
+    // assume that last pokemon is the new active one (in case of moves that switch like u turn or when i implement double battles)
+    setPlayerActivePokemon(changedPlayerPokemon[changedPlayerPokemon.length-1]);
+    setEnemyActivePokemon(changedEnemyPokemon[changedEnemyPokemon.length-1]);
+
+
+
+    
+
+
+  }
+
+
+  
   
 
   console.log("active pokemon ", playerActivePokemon)
