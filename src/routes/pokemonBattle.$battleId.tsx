@@ -10,14 +10,16 @@ export const Route = createFileRoute('/pokemonBattle/$battleId')({
 
 
 const CREATE_BATTLE = gql`
-  mutation RandomBattle {
+mutation RandomBattle {
     randomBattle {
         id
         playerSwitch
         enemySwitch
         turnNumber
         playerTeam {
-            totalPokemon
+            id
+            freeSwitch
+            numTotalPokemon
             pokemonInBattle {
                 remainingHealth
                 isActive
@@ -25,14 +27,6 @@ const CREATE_BATTLE = gql`
                     _id
                     nickname
                     level
-                    stats {
-                        hp
-                        attack
-                        defense
-                        specialAttack
-                        specialDefense
-                        speed
-                    }
                     pokemonSpecies {
                         _id
                         name
@@ -41,6 +35,14 @@ const CREATE_BATTLE = gql`
                         menuSprite
                         teamBuilderSprite
                         type
+                    }
+                    stats {
+                        hp
+                        attack
+                        defense
+                        specialAttack
+                        specialDefense
+                        speed
                     }
                     moves {
                         _id
@@ -53,17 +55,25 @@ const CREATE_BATTLE = gql`
                         contact
                         animation
                     }
-                    ability {
-                        _id
-                        name
-                        description
-                        animation
-                    }
+                }
+                statStages {
+                    hp
+                    attack
+                    defense
+                    specialAttack
+                    specialDefense
+                    speed
+                }
+                status {
+                    primary
+                    confused
                 }
             }
         }
         enemyTeam {
-            totalPokemon
+            id
+            freeSwitch
+            numTotalPokemon
             pokemonInBattle {
                 remainingHealth
                 isActive
@@ -71,14 +81,6 @@ const CREATE_BATTLE = gql`
                     _id
                     nickname
                     level
-                    stats {
-                        hp
-                        attack
-                        defense
-                        specialAttack
-                        specialDefense
-                        speed
-                    }
                     pokemonSpecies {
                         _id
                         name
@@ -88,22 +90,13 @@ const CREATE_BATTLE = gql`
                         teamBuilderSprite
                         type
                     }
-                    moves {
-                        _id
-                        name
-                        description
-                        type
-                        basePower
-                        accuracy
-                        category
-                        contact
-                        animation
-                    }
-                    ability {
-                        _id
-                        name
-                        description
-                        animation
+                    stats {
+                        hp
+                        attack
+                        defense
+                        specialAttack
+                        specialDefense
+                        speed
                     }
                 }
                 status {

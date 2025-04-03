@@ -1,3 +1,4 @@
+import { PlayerInfo } from "./PlayerInfo";
 import { PokemonInBattle } from "./PokemonInBattle";
 
 
@@ -6,10 +7,15 @@ export interface BattleTeam {
    
   pokemonInBattle: PokemonInBattle[];
 
-  totalPokemon: number;
+  numTotalPokemon: number;
 
-  userId: string;
+  id: string;
 
-  playerName:string
+  playerName:string;
+
+  freeSwitch:boolean;
+
+  playerInfo:PlayerInfo;
+
 
 }

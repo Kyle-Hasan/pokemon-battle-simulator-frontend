@@ -1,49 +1,11 @@
-import { Environment } from "./Environment";
-import { Move } from "./Move";
-import { PokemonInBattle } from "./PokemonInBattle";
+import { BattleTurnEvent } from "./BattleTurnEvent";
 
-export class BattleUpdatePlayer {
+export interface BattleUpdatePlayer {
 
  
-  battleId!: string;
+  battleId:string,
 
-  
-  changedPlayerPokemon!: PokemonInBattle[];
-
-  
-  changedEnemyPokemon!: PokemonInBattle[];
-
-  environment!: Environment;
-
-  
-  movedFirst!: boolean;
-
-  
-  playerFreeSwitch!: boolean;
-
-  
-  enemyFreeSwitch!: boolean;
-
-
-  playerDamage?: number;
-
-  
-  enemyDamage?: number;
-
-
-  playerMoveUsed!: Move | null;
-
-
-  enemyMoveUsed!: Move | null;
-
-
-  playerLost!: boolean | null;
-
-  enemyLost!: boolean | null;
-
-  
-  turnNumber!:number
-
+  events:BattleTurnEvent[]
 
   
   

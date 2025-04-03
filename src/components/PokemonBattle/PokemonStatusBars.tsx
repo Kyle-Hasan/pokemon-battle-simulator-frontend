@@ -22,7 +22,7 @@ export default function PokemonStatusBars({
         <div className="w-[85%] bg-green-100 h-4 rounded-md">
           <div className={` bg-green-500 h-4 rounded-md  `} style={{width:`${percentHealth}%`}}></div>
         </div>
-        <div className=" px-1 h-4 text-xs rounded-md">{percentHealth}%</div>
+        <div className=" px-1 h-4 text-xs rounded-md">{percentHealth.toFixed(0)}%</div>
       </div>
      
     </div>

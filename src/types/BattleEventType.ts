@@ -1,0 +1,20 @@
+export enum BattleEventType {
+    Move = "MOVE",
+    Damage = "DAMAGE",
+    Status = "STATUS",
+    Environment = "ENVIRONMENT",
+    Switch_In = "SWITCH_OUT",
+    Switch_Out = "SWITCH_IN",
+    Faint = "FAINT",
+    Crit = "CRIT",
+    Super_Effective = "SUPER_EFFECTIVE",
+    Tailwind = "TAILWIND",
+    Trick_Room = "TRICK_ROOM",
+    Missed = "MISSED",
+    Evaded = "EVADED",
+    Ineffective = "INEFFECTIVE",
+    Immune = "IMMUNE",
+    Win = "WIN",
+    Attack = "ATTACK",
+  }
+  

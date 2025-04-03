@@ -9,10 +9,10 @@ interface MoveSelectorProps {
 
 export default function MoveSelector({moves,onClick}:MoveSelectorProps) {
   return (
-    <div className='mt-8 flex gap-4'>
+    <div className='mt-2 flex gap-4'>
       {
         moves.map((move)=> {
-          return (<MoveCard onClick={onClick} move={move} ></MoveCard>)
+          return (<MoveCard key={move._id} onClick={onClick} move={move} ></MoveCard>)
         })
       }
     </div>

@@ -12,7 +12,7 @@ export default function InBattleTeamDisplay({
   return (
     <div className="flex gap-2">
       {team.map((pokemon) => (
-        <TeamPokemonDisplayCard pokemon={pokemon} />
+        <TeamPokemonDisplayCard key={pokemon.pokemon._id} pokemon={pokemon} />
       ))}
     </div>
   );

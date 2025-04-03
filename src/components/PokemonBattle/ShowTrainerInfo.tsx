@@ -19,7 +19,7 @@ export default function ShowTrainerInfo({
       </div>
       <div>
         {trainerTeamImageLink.map((imageLink) => {
-          return <img src={imageLink}></img>
+          return <img key={imageLink} src={imageLink}></img>
         })}
       </div>
     </div>
