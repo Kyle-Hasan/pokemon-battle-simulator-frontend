@@ -14,7 +14,8 @@ export interface BattleTurnEvent {
     enteringPokemon:PokemonInBattle;
     moveUsed:Move;
     enviroment:Environment;
-    userId:string
+    userId:string;
+    turnNumber:number
 
 
 }

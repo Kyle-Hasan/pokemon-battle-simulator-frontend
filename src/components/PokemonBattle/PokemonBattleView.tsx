@@ -120,15 +120,17 @@ interface Action {
 }
 
 const battleReducer = (state: CurrentBattleState, action: Action) => {
+  debugger
   switch (action.type) {
     case "intialize":
       return action.payload as CurrentBattleState;
 
     case "update": {
+     
       const event = action.payload as BattleTurnEvent;
       const playerEvent =
         event.pokemonId === state.enemyActivePokemon?.pokemon._id;
-      if (event.type === BattleEventType.Damage) {
+      if (event.type === BattleEventType.DAMAGE) {
         if (!playerEvent) {
           state.enemyActivePokemon!.remainingHealth -= event.damage;
           // add status later
@@ -141,13 +143,13 @@ const battleReducer = (state: CurrentBattleState, action: Action) => {
         } else {
           state.enemyActivePokemon = null;
         }
-      } else if (event.type === BattleEventType.Switch_Out) {
+      } else if (event.type === BattleEventType.SWITCH_OUT) {
         if (playerEvent) {
           state.playerActivePokemon = null;
         } else {
           state.enemyActivePokemon = null;
         }
-      } else if (event.type === BattleEventType.Switch_In) {
+      } else if (event.type === BattleEventType.SWITCH_IN) {
         if (playerEvent) {
           state.playerActivePokemon = event.enteringPokemon;
         } else {
@@ -195,6 +197,7 @@ export default function PokemonBattleView({ battle }: PokemonBattleViewProps) {
 
  
   useEffect(() => {
+
     if (!data) return;
 
    
@@ -207,6 +210,7 @@ export default function PokemonBattleView({ battle }: PokemonBattleViewProps) {
         setActiveEvent(e);
       }, 1000 * index);
     });
+    
   }, [data]);
 
 
@@ -243,7 +247,7 @@ export default function PokemonBattleView({ battle }: PokemonBattleViewProps) {
             enemyTeam={state.enemyTeam}
             playerTeam={state.playerTeam}
           />
-          <PokemonBattleTurnInfo />
+          <PokemonBattleTurnInfo  />
         </>
       )}
     </div>

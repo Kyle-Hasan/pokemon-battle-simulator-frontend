@@ -84,9 +84,11 @@ export default function PokemonBattleBattleField({
             
        
         <div className="ml-[15%]">
+          {activeEvent &&
           <div className="mt-4 bg-black/50 p-2 w-100">
-              hi
+            {activeEvent?.message}  
             </div>
+            }
            { playerActivePokemon && <MoveSelector moves={playerActivePokemon.pokemon?.moves as Move[]} onClick={onMoveClick}></MoveSelector>}
           <InBattleTeamDisplay team={playerTeam?.pokemonInBattle ?? []}></InBattleTeamDisplay>
         </div>
