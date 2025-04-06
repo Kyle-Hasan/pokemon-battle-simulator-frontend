@@ -48,6 +48,7 @@ const BATTLE_UPDATE_SUBSCRIPTION = gql`
         superEffective
         pokemonId
         leavingPokemonId
+        turnNumber
         enteringPokemon {
           remainingHealth
           isActive
@@ -137,7 +138,7 @@ const battleReducer = (state: CurrentBattleState, action: Action) => {
         } else if (playerEvent) {
           state.playerActivePokemon!.remainingHealth -= event.damage;
         }
-      } else if (event.type === BattleEventType.Faint) {
+      } else if (event.type === BattleEventType.FAINT) {
         if (playerEvent) {
           state.playerActivePokemon = null;
         } else {
@@ -247,7 +248,7 @@ export default function PokemonBattleView({ battle }: PokemonBattleViewProps) {
             enemyTeam={state.enemyTeam}
             playerTeam={state.playerTeam}
           />
-          <PokemonBattleTurnInfo  />
+          <PokemonBattleTurnInfo events={state.events}  />
         </>
       )}
     </div>
