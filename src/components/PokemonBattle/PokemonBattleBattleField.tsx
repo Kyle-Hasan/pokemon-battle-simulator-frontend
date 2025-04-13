@@ -1,14 +1,13 @@
-import React from "react";
-import PokemonSprite from "./PokemonSprite";
+import React, { useState,useEffect, useRef } from "react";
 import ShowTrainerInfo from "./ShowTrainerInfo";
 import MoveSelector from "./MoveSelector";
 import { Move } from "../../types/Move";
 import InBattleTeamDisplay from "./InBattleTeamDisplay";
-import PokemonStatusBars from "./PokemonStatusBars";
 import { BattleTurnEvent } from "../../types/BattleTurnEvent";
 import { PokemonInBattle } from "../../types/PokemonInBattle";
 import { BattleTeam } from "../../types/BattleTeam";
 import ActivePokemon from "./ActivePokemon";
+import { useBattleAnimation } from "../animations/useBattleAnimation";
 
 
 
@@ -35,10 +34,46 @@ export default function PokemonBattleBattleField({
 }:PokemonBattleBattleFieldProps) {
 
 
+  const [playerPokemonActiveEvent,setPlayerPokemonActiveEvent] = useState<BattleTurnEvent | null>(null);
+
+  const [enemyPokemonActiveEvent, setEnemyPokemonActiveEvent] = useState<BattleTurnEvent | null>(null);
+
+  const fieldRef = useRef<HTMLDivElement>(null);
+
+  const playerPokemonRef = useRef<HTMLImageElement>(null);
+
+  const enemyPokemonRef = useRef<HTMLImageElement>(null);
+
+
+  const {play} = useBattleAnimation();
+
+
+  //subscribe to active event so that we can play send them to the right component to play animations
+
+  useEffect(
+      ()=> {
+
+        if(activeEvent?.pokemonId === playerActivePokemon?.pokemon._id) {
+          setPlayerPokemonActiveEvent(activeEvent);
+        }
+
+        else if(activeEvent?.pokemonId === enemyActivePokemon?.pokemon._id) {
+          setEnemyPokemonActiveEvent(activeEvent);
+        }
+        if(activeEvent?.moveUsed.name) {
+        play(fieldRef.current as HTMLElement,playerPokemonRef.current as HTMLElement,enemyPokemonRef.current as HTMLElement,activeEvent?.moveUsed.name);
+        }
+
+      }
+    ,[activeEvent]
+  )
+
+
   
 
   return (
     <div
+    ref={fieldRef}
       className="w-[35%] border p-8 "
       style={{
         backgroundImage:
@@ -54,7 +89,7 @@ export default function PokemonBattleBattleField({
       <div className="flex gap-12">
       { enemyActivePokemon &&
      
-           <ActivePokemon activePokemon={enemyActivePokemon} player={false}></ActivePokemon>
+           <ActivePokemon ref={enemyPokemonRef} activeEvent={enemyPokemonActiveEvent} activePokemon={enemyActivePokemon} player={false}></ActivePokemon>
       }
           <ShowTrainerInfo
             trainerName={enemyTeam?.playerInfo?.playerName ?? ""}
@@ -77,7 +112,7 @@ export default function PokemonBattleBattleField({
           />
 
           {playerActivePokemon &&
-          <ActivePokemon activePokemon={playerActivePokemon} player={true}></ActivePokemon>
+          <ActivePokemon ref={playerPokemonRef} activeEvent={playerPokemonActiveEvent} activePokemon={playerActivePokemon} player={true}></ActivePokemon>
 
             }
         </div>

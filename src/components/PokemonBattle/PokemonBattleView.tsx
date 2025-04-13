@@ -121,7 +121,6 @@ interface Action {
 }
 
 const battleReducer = (state: CurrentBattleState, action: Action) => {
-  debugger
   switch (action.type) {
     case "intialize":
       return action.payload as CurrentBattleState;

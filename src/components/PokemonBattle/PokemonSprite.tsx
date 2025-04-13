@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { forwardRef } from 'react';
 
-interface PokemonSpriteInterface {
-  pokemonSpriteLink:string
+interface PokemonSpriteProps {
+  pokemonSpriteLink: string;
 }
 
-export default function PokemonSprite({pokemonSpriteLink}: PokemonSpriteInterface) {
-  return (
-    <img className='w-16 h-16' src={pokemonSpriteLink}/>
-  )
-}
+const PokemonSprite = forwardRef<HTMLImageElement, PokemonSpriteProps>(
+  ({ pokemonSpriteLink }, ref) => <img ref={ref} className="w-16 h-16" src={pokemonSpriteLink} />
+);
+
+export default PokemonSprite;
+
