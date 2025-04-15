@@ -121,15 +121,17 @@ interface Action {
 }
 
 const battleReducer = (state: CurrentBattleState, action: Action) => {
+  debugger
   switch (action.type) {
     case "intialize":
       return action.payload as CurrentBattleState;
 
     case "update": {
+      console.log("event ", action.payload)
      
       const event = action.payload as BattleTurnEvent;
       const playerEvent =
-        event.pokemonId === state.enemyActivePokemon?.pokemon._id;
+        event.pokemonId !== state.enemyActivePokemon?.pokemon._id;
       if (event.type === BattleEventType.DAMAGE) {
         if (!playerEvent) {
           state.enemyActivePokemon!.remainingHealth -= event.damage;
@@ -203,9 +205,12 @@ export default function PokemonBattleView({ battle }: PokemonBattleViewProps) {
    
     const { battleUpdate } = data;
     const events = battleUpdate?.events ?? [];
+  
     events.forEach((e, index) => {
      
       setTimeout(() => {
+      console.log(" in set timeout",e)
+      debugger
         dispatch({type:"update",payload:e});
         setActiveEvent(e);
       }, 1000 * index);

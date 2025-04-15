@@ -10,6 +10,7 @@ export function useBattleAnimation() {
     name: AnimName
   ) => {
     const a: AnimSpec = animSpecs[name];
+    debugger
 
     const atkAnim = attacker.animate(
       [

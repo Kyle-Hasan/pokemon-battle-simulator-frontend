@@ -60,8 +60,9 @@ export default function PokemonBattleBattleField({
         else if(activeEvent?.pokemonId === enemyActivePokemon?.pokemon._id) {
           setEnemyPokemonActiveEvent(activeEvent);
         }
-        if(activeEvent?.moveUsed.name) {
-        play(fieldRef.current as HTMLElement,playerPokemonRef.current as HTMLElement,enemyPokemonRef.current as HTMLElement,activeEvent?.moveUsed.name);
+        debugger
+        if(activeEvent?.moveUsed?.name) {
+        play(fieldRef.current as HTMLElement,playerPokemonRef.current as HTMLElement,enemyPokemonRef.current as HTMLElement,activeEvent?.moveUsed?.name.replace(/ /g,'').toLowerCase());
         }
 
       }

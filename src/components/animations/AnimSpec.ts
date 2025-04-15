@@ -1,12 +1,11 @@
 export interface AnimSpec {
-  dx?: number
-  dy?: number
-  duration: number
-  tint?: string
-  bg?: string
-  particles?: { color: string; count: number }
+  dx?: number;
+  dy?: number;
+  duration: number;
+  tint?: string;
+  bg?: string;
+  particles?: { color: string; count: number };
 }
-
 
 export const animSpecs: Record<string, AnimSpec> = {
   flamethrower: {
@@ -25,10 +24,13 @@ export const animSpecs: Record<string, AnimSpec> = {
     tint: "#66aaff",
     bg: "#003366",
     particles: { color: "#66aaff", count: 40 }
+  },
+  flareblitz: {
+    dx: 50,
+    duration: 800,
+    tint: "#ff3300",
+    particles: { color: "#ff3300", count: 60 }
   }
-}
+};
 
-
-export type AnimName = string  
-
-  
+export type AnimName = string;

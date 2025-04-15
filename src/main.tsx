@@ -20,11 +20,11 @@ declare module '@tanstack/react-router' {
 }
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  
     
     <ApolloProvider client={client}>
     <RouterProvider router={router} />
   
     </ApolloProvider>
-  </StrictMode>,
+
 )
